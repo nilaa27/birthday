@@ -145,10 +145,7 @@
         }
         .qr-preview-image { max-width: 150px; border-radius: 10px; border: 1px solid var(--glass-border); display: block; transition: all 0.3s ease; }
         .qr-preview-image.error-border { border: 2px solid var(--error); }
-        .qr-error-icon {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 3rem; color: var(--error);
-            opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
-        }
+        .qr-error-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 3rem; color: var(--error); opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
         .qr-error-icon.visible { opacity: 1; }
         .feedback-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); z-index: 3000; justify-content: center; align-items: center; }
         .feedback-content { background: rgba(30, 40, 60, 0.95); border-radius: 20px; padding: 40px; text-align: center; width: 90%; max-width: 400px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5); border-top: 4px solid var(--primary); }
@@ -164,7 +161,6 @@
     </style>
 </head>
 <body>
-    
     <div class="container">
         <div id="auth-container">
             <div class="box" id="adminLoginBox">
@@ -193,14 +189,12 @@
                     <p class="register-link">Admin baru? <a href="register.html">Buat Akun Disini</a></p>
                 </div>
             </div>
-            
             <div class="box" id="adminPanelBox">
                 <div class="confetti"></div>
                 <div class="panel-header">
                     <h1><i class="fas fa-cogs"></i> Admin Panel</h1>
                     <button class="logout-btn" onclick="logout()" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
                 </div>
-                
                 <form id="editForm" onsubmit="event.preventDefault(); saveData();" class="panel-main">
                     <div class="panel-section">
                         <div class="section-title"><i class="fas fa-birthday-cake"></i><span>Personal Info</span></div>
@@ -219,7 +213,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="panel-section">
                         <div class="section-title"><i class="fas fa-qrcode"></i><span>Gift QR Code</span></div>
                         <div class="input-group">
@@ -235,7 +228,6 @@
                             <i class="fas fa-exclamation-triangle qr-error-icon" id="qrErrorIcon"></i>
                         </div>
                     </div>
-
                     <div class="panel-section" data-span="2">
                         <div class="section-title"><i class="fas fa-users"></i><span>Guest Login</span></div>
                         <div class="input-group">
@@ -254,7 +246,6 @@
                         </div>
                     </div>
                 </form>
-
                 <div class="panel-actions">
                     <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Main Page</a>
                     <button type="submit" form="editForm" class="btn-save"><i class="fas fa-save"></i> Save Changes</button>
@@ -262,7 +253,6 @@
             </div>
         </div>
     </div>
-    
     <div class="feedback-modal" id="feedbackModal">
         <div class="feedback-content">
             <div class="icon-container">
@@ -274,31 +264,15 @@
             <p id="feedbackMessage"></p>
         </div>
     </div>
-
     <script>
-        // --- AMANKAN API KEY ANDA! ---
         const firebaseConfig = {
             apiKey: "GANTI_DENGAN_API_KEY_BARU_ANDA",
             authDomain: "mayfa-fa284.firebaseapp.com",
             databaseURL: "https://mayfa-fa284-default-rtdb.asia-southeast1.firebasedatabase.app",
-            // ...sisa config
         };
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
-
-        // --- Elemen UI ---
-        const authContainer = document.getElementById('auth-container');
-        const feedbackModal = document.getElementById('feedbackModal');
-        const feedbackTitle = document.getElementById('feedbackTitle');
-        const feedbackMessage = document.getElementById('feedbackMessage');
-        const feedbackLoader = document.getElementById('feedbackLoader');
-        const successIcon = document.getElementById('successIcon');
-        const failureIcon = document.getElementById('failureIcon');
-        const qrImageUrlInput = document.getElementById('qrImageUrlInput');
-        const qrPreviewImage = document.getElementById('qrPreviewImage');
-        const qrErrorIcon = document.getElementById('qrErrorIcon');
-
-        // --- Logika Feedback Modal ---
+        const authContainer = document.getElementById('auth-container'), feedbackModal = document.getElementById('feedbackModal'), feedbackTitle = document.getElementById('feedbackTitle'), feedbackMessage = document.getElementById('feedbackMessage'), feedbackLoader = document.getElementById('feedbackLoader'), successIcon = document.getElementById('successIcon'), failureIcon = document.getElementById('failureIcon'), qrImageUrlInput = document.getElementById('qrImageUrlInput'), qrPreviewImage = document.getElementById('qrPreviewImage'), qrErrorIcon = document.getElementById('qrErrorIcon');
         function showFeedback(state, title, message = '') {
             feedbackLoader.classList.add('hidden');
             successIcon.classList.add('hidden');
@@ -318,14 +292,9 @@
                  feedbackContent.style.borderColor = 'var(--error)';
             }
         }
-        function hideFeedback() {
-            feedbackModal.style.display = 'none';
-        }
-
-        // --- Logika Inti ---
+        function hideFeedback() { feedbackModal.style.display = 'none'; }
         function adminLogin() {
-            const user = document.getElementById('adminUser').value.trim();
-            const pass = document.getElementById('adminPass').value;
+            const user = document.getElementById('adminUser').value.trim(), pass = document.getElementById('adminPass').value;
             if (!user || !pass) {
                  showFeedback('failure', 'Input Diperlukan', 'Masukkan username dan password.');
                  setTimeout(hideFeedback, 2000);
@@ -360,7 +329,6 @@
                 setTimeout(hideFeedback, 3000);
             });
         }
-        
         function logout() {
             authContainer.classList.remove('is-active');
             document.getElementById('editForm').reset();
@@ -368,7 +336,6 @@
             document.getElementById('adminPass').value = '';
             updateQrPreview();
         }
-        
         function loadDataToForm() {
             showFeedback('loading', 'Memuat Data...');
             database.ref('settings').once('value').then((snapshot) => {
@@ -385,7 +352,6 @@
                 setTimeout(hideFeedback, 3000);
             });
         }
-        
         function saveData() {
             showFeedback('loading', 'Menyimpan Perubahan...');
             const settings = {
@@ -404,8 +370,6 @@
                 setTimeout(hideFeedback, 3000);
             });
         }
-
-        // --- Logika Pratinjau QR ---
         function updateQrPreview() {
             const qrImageUrl = qrImageUrlInput.value.trim();
             qrErrorIcon.classList.remove('visible');
@@ -425,8 +389,6 @@
                 qrPreviewImage.src = '';
             }
         }
-        
-        // --- Animasi Scroll ---
         function initScrollAnimations() {
             const sections = document.querySelectorAll('.panel-section');
             const panelMain = document.querySelector('.panel-main');
@@ -438,8 +400,6 @@
             }, { root: panelMain, rootMargin: '0px', threshold: 0.2 });
             sections.forEach(section => observer.observe(section));
         }
-
-        // --- Confetti Effect ---
         function launchConfetti() {
             const confettiContainer = document.querySelector('#adminPanelBox .confetti');
             if (!confettiContainer) return;
@@ -449,11 +409,7 @@
                 const confettiPiece = document.createElement('div');
                 confettiPiece.classList.add('confetti-piece');
                 confettiContainer.appendChild(confettiPiece);
-                const xPos = Math.random() * 100;
-                const yPos = -20 - (Math.random() * 20);
-                const size = 5 + Math.random() * 10;
-                const rotation = Math.random() * 360;
-                const color = colors[Math.floor(Math.random() * colors.length)];
+                const xPos = Math.random() * 100, yPos = -20 - (Math.random() * 20), size = 5 + Math.random() * 10, rotation = Math.random() * 360, color = colors[Math.floor(Math.random() * colors.length)];
                 confettiPiece.style.left = `${xPos}%`;
                 confettiPiece.style.width = `${size}px`;
                 confettiPiece.style.height = `${size * 1.5}px`;
@@ -465,8 +421,6 @@
                 animation.onfinish = () => confettiPiece.remove();
             }
         }
-
-        // --- Event Listeners ---
         document.addEventListener('DOMContentLoaded', () => {
             qrImageUrlInput.addEventListener('input', updateQrPreview);
             document.getElementById('togglePassword').addEventListener('click', function() {
