@@ -12,149 +12,77 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
     <style>
         :root {
-            --primary: #ff7e5f;
-            --secondary: #feb47b;
-            --accent1: #ffc371;
-            --accent2: #ff5f6d;
-            --dark: #1a1a2e;
-            --darker: #16213e;
-            --glass: rgba(255, 255, 255, 0.08);
-            --glass-border: rgba(255, 255, 255, 0.15);
-            --success: #30cfd0;
-            --error: #f87171;
-            --light-text: rgba(255, 255, 255, 0.9);
-            --transition-fast: all 0.3s ease;
+            --primary: #ff7e5f; --secondary: #feb47b; --accent1: #ffc371; --accent2: #ff5f6d;
+            --dark: #1a1a2e; --darker: #16213e; --glass: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.15); --success: #30cfd0; --error: #f87171;
+            --light-text: rgba(255, 255, 255, 0.9); --transition-fast: all 0.3s ease;
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body {
-            background: var(--darker);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #fff;
-            position: relative;
-            overflow: hidden;
-            padding: 20px;
+            background: var(--darker); min-height: 100vh; display: flex; justify-content: center;
+            align-items: center; color: #fff; position: relative; overflow: hidden; padding: 20px;
         }
-        
-        /* Aurora Background Effect */
         body::before, body::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 800px;
-            height: 800px;
+            content: ''; position: absolute; top: 50%; left: 50%; width: 800px; height: 800px;
             background-image: radial-gradient(circle, var(--primary) 0%, rgba(255,126,95,0) 60%);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            animation: move-aurora 20s linear infinite;
-            filter: blur(100px);
-            opacity: 0.4;
+            border-radius: 50%; transform: translate(-50%, -50%); animation: move-aurora 20s linear infinite;
+            filter: blur(100px); opacity: 0.4;
         }
-
         body::after {
             background-image: radial-gradient(circle, var(--accent2) 0%, rgba(255,95,109,0) 60%);
-            animation-name: move-aurora-2;
-            animation-delay: -10s;
+            animation-name: move-aurora-2; animation-delay: -10s;
         }
-
         @keyframes move-aurora {
             0% { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
             50% { transform: translate(-45%, -55%) rotate(180deg) scale(1.2); }
             100% { transform: translate(-50%, -50%) rotate(360deg) scale(1); }
         }
-
         @keyframes move-aurora-2 {
             0% { transform: translate(-50%, -50%) rotate(0deg) scale(1.1); }
             50% { transform: translate(-55%, -45%) rotate(-180deg) scale(0.9); }
             100% { transform: translate(-50%, -50%) rotate(-360deg) scale(1.1); }
         }
-
-        .container {
-            width: 100%;
-            max-width: 450px;
-            z-index: 10;
-        }
-        
+        .container { width: 100%; max-width: 450px; z-index: 10; }
         .box {
-            background: var(--glass);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 40px;
-            width: 100%;
+            background: var(--glass); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border); border-radius: 24px; padding: 40px; width: 100%;
             box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            display: flex;
-            flex-direction: column;
-            position: relative; /* Needed for confetti */
-            overflow: hidden; /* Needed for confetti */
+            display: flex; flex-direction: column; position: relative; overflow: hidden;
         }
-        
         .header { text-align: center; margin-bottom: 30px; }
-        
         .header-icon {
-            width: 75px; height: 75px;
-            background: linear-gradient(45deg, var(--accent2), var(--primary));
-            border-radius: 50%; display: flex;
-            align-items: center; justify-content: center; margin: 0 auto 15px; border: 2px solid var(--glass-border);
-            box-shadow: 0 8px 30px rgba(255, 95, 109, 0.4); animation: float 4s ease-in-out infinite;
+            width: 75px; height: 75px; background: linear-gradient(45deg, var(--accent2), var(--primary));
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px;
+            border: 2px solid var(--glass-border); box-shadow: 0 8px 30px rgba(255, 95, 109, 0.4); animation: float 4s ease-in-out infinite;
         }
-        
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
-
         .header-icon i { font-size: 36px; color: #fff; text-shadow: 0 0 15px rgba(0,0,0,0.3); }
-        
         h1 {
-            font-size: 2rem; font-weight: 700; 
-            background: linear-gradient(45deg, var(--primary), var(--accent1));
+            font-size: 2rem; font-weight: 700; background: linear-gradient(45deg, var(--primary), var(--accent1));
             -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: 6px;
         }
-
         .header p { color: var(--light-text); font-size: 1rem; }
-        
         .input-group { margin-bottom: 20px; position: relative; }
-
         .input-wrapper { position: relative; }
-
         .input-wrapper i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--primary); font-size: 16px; transition: var(--transition-fast); }
-
         .input-field {
-            width: 100%; padding: 14px 16px 14px 45px; background: rgba(0, 0, 0, 0.2); border: 1px solid var(--glass-border);
-            border-radius: 10px; color: #fff; font-size: 1rem; transition: var(--transition-fast);
+            width: 100%; padding: 14px 16px 14px 45px; background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--glass-border); border-radius: 10px; color: #fff; font-size: 1rem; transition: var(--transition-fast);
         }
-
         .input-field:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 15px rgba(255, 126, 95, 0.4); }
         .input-field:focus + i { color: var(--accent1); }
-
         .btn {
-            width: 100%; padding: 15px; 
-            background: linear-gradient(90deg, var(--accent2) 0%, var(--primary) 100%);
+            width: 100%; padding: 15px; background: linear-gradient(90deg, var(--accent2) 0%, var(--primary) 100%);
             border: none; border-radius: 12px; color: #fff; font-size: 1rem; font-weight: 600; cursor: pointer;
             transition: var(--transition-fast); display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 10px;
         }
-
         .btn:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 10px 25px rgba(255, 95, 109, 0.35); }
         .btn i { transition: transform 0.3s ease; }
         .btn:hover i { transform: rotate(15deg); }
-
-
         .back-link { color: var(--light-text); text-decoration: none; font-weight: 500; transition: var(--transition-fast); text-align: center; display: block; margin-top: 20px; }
         .back-link:hover { color: var(--primary); }
-
-        /* Confetti Styles */
         .confetti { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
         .confetti-piece { position: absolute; width: 10px; height: 20px; background: #f00; top: -20px; opacity: 0; }
-        
         .feedback-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); z-index: 3000; justify-content: center; align-items: center; }
         .feedback-content { background: rgba(30, 40, 60, 0.95); border-radius: 20px; padding: 30px 40px; text-align: center; width: 90%; max-width: 450px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5); border-top: 4px solid var(--success); }
         .feedback-content h2 { font-size: 1.8rem; margin-bottom: 20px; color: var(--success); background: linear-gradient(45deg, var(--success), #a1ffce); -webkit-background-clip: text; background-clip: text; color: transparent; }
@@ -182,7 +110,6 @@
                 <h1>Create Admin Account</h1>
                 <p>Fill in the details to register a new admin.</p>
             </div>
-            
             <form id="registerForm" onsubmit="event.preventDefault(); createAccount();">
                 <div class="input-group">
                     <div class="input-wrapper">
@@ -206,10 +133,9 @@
                     <i class="fas fa-plus-circle"></i> Create Account
                 </button>
             </form>
-            <a href="index.html" class="back-link">Back to Login</a>
+            <a href="admin.html" class="back-link">Go to Admin Panel</a>
         </div>
     </div>
-    
     <div class="feedback-modal" id="accountModal">
         <div class="feedback-content">
             <h2><i class="fas fa-party-horn"></i> Account Created!</h2>
@@ -231,76 +157,62 @@
             </div>
             <div class="feedback-actions">
                 <button class="feedback-btn btn-back" onclick="closeModal()">Back</button>
-                <button class="feedback-btn btn-signin" onclick="goToLogin()">Sign In</button>
+                <button class="feedback-btn btn-signin" onclick="goToAdmin()">Go to Admin</button>
             </div>
         </div>
     </div>
-
     <script>
-        // --- AMANKAN API KEY ANDA! ---
         const firebaseConfig = {
             apiKey: "GANTI_DENGAN_API_KEY_BARU_ANDA",
             authDomain: "mayfa-fa284.firebaseapp.com",
             databaseURL: "https://mayfa-fa284-default-rtdb.asia-southeast1.firebasedatabase.app",
-            //...sisa config
         };
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
-
         function createAccount() {
             const adminName = document.getElementById('adminName').value;
             const adminEmail = document.getElementById('adminEmail').value;
             const adminPass = document.getElementById('adminPass').value;
-
             if (!adminName || !adminPass) {
                 alert("Admin Name and Password are required.");
                 return;
             }
-            
-            // Show loading state on button (optional)
             const submitBtn = document.querySelector('#registerForm button');
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating...';
             submitBtn.disabled = true;
-
             const newAdminRef = database.ref('admins').push();
             newAdminRef.set({
                 username: adminName,
-                password: adminPass, // Note: Storing plain text passwords is not secure. Use Firebase Auth for production.
+                password: adminPass,
                 email: adminEmail || null,
                 createdAt: new Date().toISOString()
             }).then(() => {
                 launchConfetti();
-                setTimeout(() => { // Delay modal to enjoy confetti
+                setTimeout(() => {
                   showAccountModal(adminName, adminPass);
                 }, 500);
             }).catch(error => {
                 alert('Error creating account: ' + error.message);
             }).finally(() => {
-                // Restore button
                 submitBtn.innerHTML = '<i class="fas fa-plus-circle"></i> Create Account';
                 submitBtn.disabled = false;
             });
         }
-        
         function showAccountModal(user, pass) {
             document.getElementById('displayUser').textContent = user;
             document.getElementById('displayPass').textContent = pass;
             document.getElementById('accountModal').style.display = 'flex';
         }
-        
         function closeModal() {
             document.getElementById('accountModal').style.display = 'none';
             document.getElementById('registerForm').reset();
         }
-
-        function goToLogin() {
-            window.location.href = 'index.html';
+        function goToAdmin() {
+            window.location.href = 'admin.html';
         }
-        
         function copyData(elementId) {
             const textToCopy = document.getElementById(elementId).textContent;
             navigator.clipboard.writeText(textToCopy).then(() => {
-                // Simple visual feedback
                 const copyButton = event.target.closest('.copy-btn');
                 copyButton.innerHTML = '<i class="fas fa-check"></i>';
                 setTimeout(() => {
@@ -310,40 +222,24 @@
                 alert('Failed to copy!');
             });
         }
-
-        // --- Confetti Effect ---
         function launchConfetti() {
             const confettiContainer = document.querySelector('#registrationBox .confetti');
             if (!confettiContainer) return;
-
             const confettiCount = 150;
             const colors = ['#ff7e5f', '#feb47b', '#ffc371', '#ff5f6d', '#30cfd0', '#ffffff'];
-
             for (let i = 0; i < confettiCount; i++) {
                 const confettiPiece = document.createElement('div');
                 confettiPiece.classList.add('confetti-piece');
                 confettiContainer.appendChild(confettiPiece);
-
-                const xPos = Math.random() * 100;
-                const yPos = -20 - (Math.random() * 20); // Start off-screen
-                const size = 5 + Math.random() * 10;
-                const rotation = Math.random() * 360;
-                const color = colors[Math.floor(Math.random() * colors.length)];
-                
+                const xPos = Math.random() * 100, yPos = -20 - (Math.random() * 20), size = 5 + Math.random() * 10, rotation = Math.random() * 360, color = colors[Math.floor(Math.random() * colors.length)];
                 confettiPiece.style.left = `${xPos}%`;
                 confettiPiece.style.width = `${size}px`;
                 confettiPiece.style.height = `${size * 1.5}px`;
                 confettiPiece.style.backgroundColor = color;
-                
                 const animation = confettiPiece.animate([
                     { transform: `translate3d(0, ${yPos}px, 0) rotateZ(${rotation}deg)`, opacity: 1 },
                     { transform: `translate3d(${Math.random() * 200 - 100}px, 110vh, 0) rotateZ(${rotation + Math.random() * 360}deg)`, opacity: 0 }
-                ], {
-                    duration: 4000 + Math.random() * 3000,
-                    easing: 'ease-out',
-                    delay: Math.random() * 500
-                });
-
+                ], { duration: 4000 + Math.random() * 3000, easing: 'ease-out', delay: Math.random() * 500 });
                 animation.onfinish = () => confettiPiece.remove();
             }
         }
