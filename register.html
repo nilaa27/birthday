@@ -77,16 +77,42 @@
             transition: var(--transition-fast); display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 10px;
         }
         .btn:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 10px 25px rgba(255, 95, 109, 0.35); }
+        .btn:disabled { cursor: not-allowed; opacity: 0.7; transform: none; box-shadow: none; }
         .btn i { transition: transform 0.3s ease; }
-        .btn:hover i { transform: rotate(15deg); }
+        .btn:hover:not(:disabled) i { transform: rotate(15deg); }
         .back-link { color: var(--light-text); text-decoration: none; font-weight: 500; transition: var(--transition-fast); text-align: center; display: block; margin-top: 20px; }
         .back-link:hover { color: var(--primary); }
         .confetti { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
         .confetti-piece { position: absolute; width: 10px; height: 20px; background: #f00; top: -20px; opacity: 0; }
-        .feedback-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); z-index: 3000; justify-content: center; align-items: center; }
-        .feedback-content { background: rgba(30, 40, 60, 0.95); border-radius: 20px; padding: 30px 40px; text-align: center; width: 90%; max-width: 450px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5); border-top: 4px solid var(--success); }
-        .feedback-content h2 { font-size: 1.8rem; margin-bottom: 20px; color: var(--success); background: linear-gradient(45deg, var(--success), #a1ffce); -webkit-background-clip: text; background-clip: text; color: transparent; }
-        .data-display { background: rgba(0, 0, 0, 0.2); border-radius: 10px; padding: 20px; margin-bottom: 25px; text-align: left; }
+        
+        /* --- STYLING MODAL MODERN --- */
+        .feedback-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); z-index: 3000;
+            justify-content: center; align-items: center;
+            opacity: 0; transition: opacity 0.3s ease; /* Transisi untuk fade */
+        }
+        .feedback-modal.visible { opacity: 1; }
+        .feedback-content {
+            background: rgba(30, 40, 60, 0.95); border-radius: 20px; padding: 30px 40px;
+            text-align: center; width: 90%; max-width: 450px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            transform: scale(0.95); transition: transform 0.3s ease; /* Transisi untuk scale */
+        }
+        .feedback-modal.visible .feedback-content { transform: scale(1); }
+        #accountModal .feedback-content { border-top: 4px solid var(--success); }
+        #failureModal .feedback-content { border-top: 4px solid var(--error); }
+        
+        .feedback-content .icon-container { height: 60px; margin-bottom: 20px; }
+        .feedback-content .icon { font-size: 50px; }
+        .feedback-content .icon.failure { color: var(--error); animation: shake 0.5s ease-out; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); } 20%, 40%, 60%, 80% { transform: translateX(8px); } }
+        
+        .feedback-content h2 { font-size: 1.8rem; margin-bottom: 10px; font-weight: 600; }
+        #accountModal h2 { background: linear-gradient(45deg, var(--success), #a1ffce); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        #failureModal h2 { background: linear-gradient(45deg, var(--error), var(--primary)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        
+        .feedback-content p { font-size: 1rem; color: var(--light-text); }
+        .data-display { background: rgba(0, 0, 0, 0.2); border-radius: 10px; padding: 20px; margin-top: 20px; margin-bottom: 25px; text-align: left; }
         .data-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; font-size: 1.1rem; }
         .data-item:last-child { margin-bottom: 0; }
         .data-item span { color: var(--light-text); }
@@ -136,31 +162,37 @@
             <a href="admin.html" class="back-link">Go to Admin Panel</a>
         </div>
     </div>
+    
     <div class="feedback-modal" id="accountModal">
         <div class="feedback-content">
             <h2><i class="fas fa-party-horn"></i> Account Created!</h2>
             <div class="data-display">
                 <div class="data-item">
                     <span>Username:</span>
-                    <div>
-                        <strong id="displayUser"></strong>
-                        <button class="copy-btn" onclick="copyData('displayUser')"><i class="fas fa-copy"></i></button>
-                    </div>
+                    <div><strong id="displayUser"></strong><button class="copy-btn" onclick="copyData('displayUser')"><i class="fas fa-copy"></i></button></div>
                 </div>
                 <div class="data-item">
                     <span>Password:</span>
-                     <div>
-                        <strong id="displayPass"></strong>
-                        <button class="copy-btn" onclick="copyData('displayPass')"><i class="fas fa-copy"></i></button>
-                    </div>
+                     <div><strong id="displayPass"></strong><button class="copy-btn" onclick="copyData('displayPass')"><i class="fas fa-copy"></i></button></div>
                 </div>
             </div>
             <div class="feedback-actions">
-                <button class="feedback-btn btn-back" onclick="closeModal()">Back</button>
+                <button class="feedback-btn btn-back" onclick="closeModal('accountModal')">Back</button>
                 <button class="feedback-btn btn-signin" onclick="goToAdmin()">Go to Admin</button>
             </div>
         </div>
     </div>
+
+    <div class="feedback-modal" id="failureModal">
+        <div class="feedback-content">
+            <div class="icon-container">
+                <i class="fas fa-times-circle icon failure"></i>
+            </div>
+            <h2 id="failureTitle">Gagal Registrasi</h2>
+            <p id="failureMessage"></p>
+        </div>
+    </div>
+
     <script>
         const firebaseConfig = {
             apiKey: "GANTI_DENGAN_API_KEY_BARU_ANDA",
@@ -169,51 +201,97 @@
         };
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
+
         function createAccount() {
-            const adminName = document.getElementById('adminName').value;
+            const adminName = document.getElementById('adminName').value.trim();
             const adminEmail = document.getElementById('adminEmail').value;
             const adminPass = document.getElementById('adminPass').value;
+            const submitBtn = document.querySelector('#registerForm button');
+
             if (!adminName || !adminPass) {
                 alert("Admin Name and Password are required.");
                 return;
             }
-            const submitBtn = document.querySelector('#registerForm button');
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating...';
+
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Checking...';
             submitBtn.disabled = true;
-            const newAdminRef = database.ref('admins').push();
-            newAdminRef.set({
-                username: adminName,
-                password: adminPass,
-                email: adminEmail || null,
-                createdAt: new Date().toISOString()
-            }).then(() => {
-                launchConfetti();
-                setTimeout(() => {
-                  showAccountModal(adminName, adminPass);
-                }, 500);
-            }).catch(error => {
-                alert('Error creating account: ' + error.message);
-            }).finally(() => {
-                submitBtn.innerHTML = '<i class="fas fa-plus-circle"></i> Create Account';
-                submitBtn.disabled = false;
+
+            database.ref('admins').orderByChild('username').equalTo(adminName).once('value', snapshot => {
+                if (snapshot.exists()) {
+                    // Tampilkan modal gagal modern jika username terdaftar
+                    showFailureModal("user sudah terdaftar", "Silakan pilih nama lain.");
+                    submitBtn.innerHTML = '<i class="fas fa-plus-circle"></i> Create Account';
+                    submitBtn.disabled = false;
+                } else {
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating...';
+                    const newAdminRef = database.ref('admins').push();
+                    newAdminRef.set({
+                        username: adminName,
+                        password: adminPass,
+                        email: adminEmail || null,
+                        createdAt: new Date().toISOString()
+                    }).then(() => {
+                        launchConfetti();
+                        setTimeout(() => showAccountModal(adminName, adminPass), 500);
+                    }).catch(error => {
+                        showFailureModal('Error Creating Account', error.message);
+                    }).finally(() => {
+                        submitBtn.innerHTML = '<i class="fas fa-plus-circle"></i> Create Account';
+                        submitBtn.disabled = false;
+                    });
+                }
             });
         }
+        
         function showAccountModal(user, pass) {
             document.getElementById('displayUser').textContent = user;
             document.getElementById('displayPass').textContent = pass;
-            document.getElementById('accountModal').style.display = 'flex';
+            const modal = document.getElementById('accountModal');
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('visible'), 10);
         }
-        function closeModal() {
-            document.getElementById('accountModal').style.display = 'none';
-            document.getElementById('registerForm').reset();
+
+        function showFailureModal(title, message) {
+            document.getElementById('failureTitle').textContent = title;
+            document.getElementById('failureMessage').textContent = message;
+            const modal = document.getElementById('failureModal');
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('visible'), 10); // Trigger fade-in
+
+            // Sembunyikan modal setelah 3.5 detik
+            setTimeout(() => {
+                closeModal('failureModal');
+            }, 3500);
         }
+        
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.remove('visible'); // Trigger fade-out
+            setTimeout(() => {
+                modal.style.display = 'none';
+                if (modalId === 'accountModal') {
+                    document.getElementById('registerForm').reset();
+                }
+            }, 300); // Sesuaikan dengan durasi transisi CSS
+        }
+
+        // Event listener untuk menutup modal saat klik background
+        document.querySelectorAll('.feedback-modal').forEach(modal => {
+            modal.addEventListener('click', (event) => {
+                if (event.target === modal) {
+                    closeModal(modal.id);
+                }
+            });
+        });
+
         function goToAdmin() {
             window.location.href = 'admin.html';
         }
+        
         function copyData(elementId) {
             const textToCopy = document.getElementById(elementId).textContent;
+            const copyButton = event.target.closest('.copy-btn');
             navigator.clipboard.writeText(textToCopy).then(() => {
-                const copyButton = event.target.closest('.copy-btn');
                 copyButton.innerHTML = '<i class="fas fa-check"></i>';
                 setTimeout(() => {
                     copyButton.innerHTML = '<i class="fas fa-copy"></i>';
@@ -222,6 +300,7 @@
                 alert('Failed to copy!');
             });
         }
+
         function launchConfetti() {
             const confettiContainer = document.querySelector('#registrationBox .confetti');
             if (!confettiContainer) return;
