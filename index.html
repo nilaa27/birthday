@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Happy Birthday For U!</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,7 +17,6 @@
             --glass-border: rgba(255, 255, 255, 0.15); --success: #30cfd0; --error: #f87171;
             --light-text: rgba(255, 255, 255, 0.9); --transition-fast: all 0.3s ease;
         }
-
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body.no-scroll { overflow: hidden; }
         body {
@@ -44,8 +43,6 @@
             50% { transform: translate(-55%, -45%) rotate(-180deg) scale(0.9); }
             100% { transform: translate(-50%, -50%) rotate(-360deg) scale(1.1); }
         }
-
-        /* MODERN LOGIN STYLES */
         .login-container { width: 100%; max-width: 400px; perspective: 1000px; }
         .login-box {
             background: var(--glass); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
@@ -112,8 +109,6 @@
         }
         @keyframes glow-pulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
         .icon-toggle-animation { animation: popIn 0.3s ease-out; }
-
-        /* Birthday Page Styles */
         .birthday-page-container { display: none; align-items: flex-start; padding-top: 8vh; padding-bottom: 8vh; width: 100%; max-width: 1000px; }
         .birthday-content { width: 100%; text-align: center; z-index: 10; }
         .main-title { font-family: 'Pacifico', cursive; font-size: clamp(3rem, 10vw, 6rem); line-height: 1.2; color: #fff; text-shadow: 0 0 15px rgba(255,255,255,0.5), 0 0 25px rgba(255,255,255,0.5); animation: fadeInDown 1s ease-out forwards; }
@@ -139,12 +134,9 @@
         .gift-btn-modern:hover { transform: translateY(-5px) scale(1.05); box-shadow: 0 10px 20px rgba(255, 107, 107, 0.6); }
         @keyframes fadeInDown { from { opacity: 0; transform: translateY(-50px); } to { opacity: 1; transform: translateY(0); } }
         .drifting-particle { position: fixed; top: -20px; border-radius: 50%; opacity: 0.8; pointer-events: none; z-index: 1; }
-        
         .balloon { position: absolute; bottom: -100px; z-index: 1; animation: floatBalloon linear forwards; transform: translateZ(0); filter: drop-shadow(0 5px 10px rgba(0,0,0,0.2)); }
         .balloon-body { position: relative; border-radius: 50%; width: 100%; height: 100%; background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.8), var(--color) 70%); }
         @keyframes floatBalloon { 0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0.8; } 100% { transform: translateY(-130vh) translateX(var(--x-drift, -3vw)) rotate(var(--rotation, -3deg)); opacity: 0; } }
-        
-        /* MODAL STYLES (Styled but using original HTML structure) */
         .feedback-modal, .gift-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); z-index: 3000; justify-content: center; align-items: center; padding: 15px; }
         .feedback-content {
             background: rgba(30, 40, 60, 0.95); border-radius: 20px; padding: 40px; text-align: center;
@@ -153,7 +145,6 @@
         }
         #successModal .feedback-content { border-top: 4px solid var(--success); }
         #failureModal .feedback-content { border-top: 4px solid var(--error); }
-        
         .feedback-content .icon-container { height: 80px; margin-bottom: 20px; display: flex; justify-content: center; align-items: center; }
         .feedback-content .icon { font-size: 60px; }
         .feedback-content .icon.success { color: var(--success); }
@@ -165,13 +156,12 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes popIn { 0% { transform: scale(0.7); opacity: 0; } 80% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(1); } }
         .feedback-content .icon { animation: popIn 0.5s ease-out forwards; }
-        
         .gift-box { position: relative; width: 250px; height: 250px; cursor: pointer; animation: wobble-gift 2s ease-in-out infinite; }
         @keyframes wobble-gift { 0%, 100% { transform: rotate(-3deg) scale(1); } 50% { transform: rotate(3deg) scale(1.05); } }
         .gift-card {
             display: none; background: #fff; border-radius: 15px; padding: 30px; text-align: center;
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3); width: 100%; max-width: 320px; z-index: 1001; animation: fadeInCard 0.5s ease-out;
-            color: #333; /* Text color for the light card */
+            color: #333;
         }
         @keyframes fadeInCard { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
         @media (max-width: 480px) { .login-box { padding: 30px 25px; } .login-box h1 { font-size: 28px; } .gift-card { padding: 20px; } }
@@ -179,7 +169,6 @@
 </head>
 <body>
     <audio id="background-music" loop><source src="mayfa.mp3"></audio>
-
     <div class="login-container" id="loginContainer">
         <div class="login-box" id="loginBox">
             <div class="glow-effect"></div>
@@ -209,7 +198,6 @@
             </button>
         </div>
     </div>
-
     <div class="birthday-page-container" id="birthdayPage">
         <div class="birthday-content">
             <h1 class="main-title">Happy Birthday, <span id="birthdayName">Mayfa!</span></h1>
@@ -238,7 +226,6 @@
             </div>
         </div>
     </div>
-    
     <div class="gift-modal" id="giftModal">
         <div class="gift-box" onclick="openCard()">
             <img src="IMG_1316.png" alt="Gift Box" style="width: 100%; height: 100%; object-fit: contain;">
@@ -250,7 +237,6 @@
             <p>"mungkin hadiahku ga seberapa semoga bermanfaat, dan selamat bertambah usia, dilancarkan disemua hal, dan menjadi pribadi yang lebih baik dari sebelum nya ✨"</p>
         </div>
     </div>
-    
     <div class="feedback-modal" id="successModal">
         <div class="feedback-content">
             <div class="icon-container">
@@ -271,9 +257,7 @@
             <p id="failure-message">Coba cek lagi...</p>
         </div>
     </div>
-    
     <script>
-        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyCWl2CJqIr-u8lSHu8s4tgZ25UQIK2ivt0",
             authDomain: "mayfa-fa284.firebaseapp.com",
@@ -283,18 +267,9 @@
             messagingSenderId: "523290705179",
             appId: "1:523290705179:web:b06ae4d8e6b08cf07b27be"
         };
-
-        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
-
-        // --- ORIGINAL JAVASCRIPT LOGIC (RESTORED) ---
-        let GUEST_USER = "user";
-        let GUEST_PASS = "user";
-        let BIRTHDAY_NAME = "Mayfa";
-        let BIRTH_DATE = "2005-09-28";
-        let QR_IMAGE_URL = "";
-
+        let GUEST_USER = "user", GUEST_PASS = "user", BIRTHDAY_NAME = "Mayfa", BIRTH_DATE = "2005-09-28", QR_IMAGE_URL = "";
         database.ref('settings').on('value', (snapshot) => {
             const settings = snapshot.val();
             if (settings) {
@@ -303,68 +278,35 @@
                 BIRTHDAY_NAME = settings.birthdayName || "Mayfa";
                 BIRTH_DATE = settings.birthDate || "2005-09-28";
                 QR_IMAGE_URL = settings.qrImageUrl || "";
-                
                 if (document.getElementById('birthdayName')) {
                     document.getElementById('birthdayName').textContent = BIRTHDAY_NAME;
                     calculateAndDisplayAge(BIRTH_DATE);
                 }
             }
         });
-
-        const loginContainer = document.getElementById("loginContainer");
-        const loginBox = document.getElementById("loginBox");
-        const birthdayPage = document.getElementById("birthdayPage");
-        const giftModal = document.getElementById("giftModal");
-        const giftBox = document.querySelector(".gift-box");
-        const giftCard = document.getElementById("giftCard");
-        const backgroundMusic = document.getElementById("background-music");
-        const togglePassword = document.getElementById("togglePassword");
-        const passwordInput = document.getElementById("password");
-        const successModal = document.getElementById("successModal");
-        const successLoader = successModal.querySelector(".loader");
-        const successIcon = successModal.querySelector(".icon.success");
-        const failureModal = document.getElementById("failureModal");
-        const failureLoader = failureModal.querySelector(".loader");
-        const failureIcon = failureModal.querySelector(".icon.failure");
-        const failureTitle = failureModal.querySelector("#failure-title");
-        const failureMessage = failureModal.querySelector("#failure-message");
-        
-        // This is the original, working login function
+        const loginContainer = document.getElementById("loginContainer"), loginBox = document.getElementById("loginBox"), birthdayPage = document.getElementById("birthdayPage"), giftModal = document.getElementById("giftModal"), giftBox = document.querySelector(".gift-box"), giftCard = document.getElementById("giftCard"), backgroundMusic = document.getElementById("background-music"), togglePassword = document.getElementById("togglePassword"), passwordInput = document.getElementById("password"), successModal = document.getElementById("successModal"), successLoader = successModal.querySelector(".loader"), successIcon = successModal.querySelector(".icon.success"), failureModal = document.getElementById("failureModal"), failureLoader = failureModal.querySelector(".loader"), failureIcon = failureModal.querySelector(".icon.failure"), failureTitle = failureModal.querySelector("#failure-title"), failureMessage = failureModal.querySelector("#failure-message");
         function login() {
-            const username = document.getElementById("username").value;
-            const password = document.getElementById("password").value;
-            
+            const username = document.getElementById("username").value, password = document.getElementById("password").value;
             if (username === GUEST_USER && password === GUEST_PASS) {
                 loginBox.style.transform = 'translateY(-20px) rotateY(20deg)';
                 loginBox.style.boxShadow = '0 25px 50px rgba(0, 0, 0, 0.3)';
-                
                 successLoader.classList.remove("hidden");
                 successIcon.classList.add("hidden");
                 successModal.style.display = "flex";
-                
                 setTimeout(() => {
                     loginBox.style.transform = 'translateY(40px) rotateY(-90deg) scale(0.8)';
                     loginBox.style.opacity = '0';
-                    
                     setTimeout(() => {
                         successLoader.classList.add("hidden");
                         successIcon.classList.remove("hidden");
-                        
                         setTimeout(() => {
                             successModal.style.display = "none";
                             loginBox.classList.add("hidden");
-                            
                             setTimeout(() => {
                                 loginContainer.style.display = "none";
                                 birthdayPage.style.display = "flex";
                                 document.body.classList.remove("no-scroll");
-                                
-                                try {
-                                    backgroundMusic.play().catch(e => console.log("Autoplay gagal: ", e));
-                                } catch (e) {
-                                    console.log("Autoplay error: ", e);
-                                }
-                                
+                                try { backgroundMusic.play().catch(e => console.log("Autoplay gagal: ", e)); } catch (e) { console.log("Autoplay error: ", e); }
                                 document.getElementById("birthdayName").textContent = BIRTHDAY_NAME;
                                 calculateAndDisplayAge(BIRTH_DATE);
                                 createBalloons(15);
@@ -373,36 +315,21 @@
                     }, 1500);
                 }, 300);
             } else {
-                loginBox.animate([
-                    { transform: 'translateX(0px)', easing: 'ease-in' },
-                    { transform: 'translateX(-15px)', easing: 'ease-out' },
-                    { transform: 'translateX(15px)', easing: 'ease-in' },
-                    { transform: 'translateX(0px)', easing: 'ease-out' }
-                ], {
-                    duration: 600,
-                    iterations: 1
-                });
-                
+                loginBox.animate([{ transform: 'translateX(0px)', easing: 'ease-in' }, { transform: 'translateX(-15px)', easing: 'ease-out' }, { transform: 'translateX(15px)', easing: 'ease-in' }, { transform: 'translateX(0px)', easing: 'ease-out' }], { duration: 600, iterations: 1 });
                 failureLoader.classList.remove("hidden");
                 failureIcon.classList.add("hidden");
                 failureTitle.textContent = "Mengecek...";
                 failureMessage.textContent = "Memverifikasi username & password.";
                 failureModal.style.display = "flex";
-                
                 setTimeout(() => {
                     failureLoader.classList.add("hidden");
                     failureIcon.classList.remove("hidden");
                     failureTitle.textContent = "Login Gagal!";
                     failureMessage.textContent = "Silakan coba lagi.";
-                    
-                    setTimeout(() => {
-                        failureModal.style.display = "none";
-                    }, 1500);
+                    setTimeout(() => { failureModal.style.display = "none"; }, 1500);
                 }, 1500);
             }
         }
-        
-        // --- ALL OTHER ORIGINAL FUNCTIONS (UNCHANGED) ---
         document.addEventListener('DOMContentLoaded', () => {
             document.body.classList.add("no-scroll");
             birthdayPage.style.display = "none";
@@ -410,14 +337,11 @@
             loginBox.style.transform = 'scale(0.9) rotateY(30deg)';
             loginBox.style.opacity = '0';
             document.body.addEventListener("click", () => backgroundMusic.play(), { once: true });
-
             setTimeout(() => {
                 loginBox.style.transform = 'scale(1)';
                 loginBox.style.opacity = '1';
             }, 100);
-            
             setInterval(createDriftingParticle, 300);
-
             const cards = document.querySelectorAll('.message-card');
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
@@ -431,7 +355,6 @@
                 observer.observe(card);
             });
         });
-        
         togglePassword.addEventListener("click", function() {
             this.classList.add("icon-toggle-animation");
             const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
@@ -440,18 +363,13 @@
             this.classList.toggle("fa-eye-slash");
             this.addEventListener("animationend", () => { this.classList.remove("icon-toggle-animation"); }, { once: true });
         });
-        
         function calculateAndDisplayAge(birthDate) {
-            const birthDateObj = new Date(birthDate);
-            const today = new Date();
+            const birthDateObj = new Date(birthDate), today = new Date();
             let age = today.getFullYear() - birthDateObj.getFullYear();
             const monthDiff = today.getMonth() - birthDateObj.getMonth();
-            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDateObj.getDate())) {
-                age--;
-            }
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDateObj.getDate())) { age--; }
             document.getElementById("ageDisplay").innerText = `Hari ini usiamu genap ${age} tahun. Selamat!`;
         }
-
         function createBalloons(count) {
             const colors = ['#FF6B6B', '#FF8E53', '#4ECDC4', '#6A11CB', '#2575FC', '#FFD166', '#EF476F', '#118AB2'];
             for (let i = 0; i < count; i++) {
@@ -472,7 +390,6 @@
                 setTimeout(() => { balloon.remove(); }, duration * 1000);
             }
         }
-
         function createDriftingParticle() {
             const particle = document.createElement("div");
             particle.className = "drifting-particle";
@@ -485,7 +402,6 @@
             const xOffset = 200 * (Math.random() - 0.5);
             particle.animate([{ transform: "translate(0, 0)", opacity: 1 }, { transform: `translate(${xOffset}px, 105vh)`, opacity: 0 }], { duration: duration, easing: "linear" }).onfinish = () => particle.remove();
         }
-        
         let fireworksInterval;
         function createParticle(x, y) {
             const p = document.createElement("div");
@@ -499,7 +415,6 @@
         }
         function startFireworks(){ if(fireworksInterval)clearInterval(fireworksInterval); fireworksInterval=setInterval(()=> {const x=window.innerWidth*Math.random(), y=window.innerHeight*Math.random()*0.5; for(let i=0;i<20;i++)createParticle(x,y);}, 500);}
         function stopFireworks() { clearInterval(fireworksInterval); }
-        
         function openGift() { giftModal.style.display = "flex"; }
         function openCard() {
             giftBox.style.display = "none";
