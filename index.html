@@ -140,20 +140,20 @@
         @keyframes fadeInDown { from { opacity: 0; transform: translateY(-50px); } to { opacity: 1; transform: translateY(0); } }
         .drifting-particle { position: fixed; top: -20px; border-radius: 50%; opacity: 0.8; pointer-events: none; z-index: 1; }
         
-        /* Modern Balloon Styles */
         .balloon { position: absolute; bottom: -100px; z-index: 1; animation: floatBalloon linear forwards; transform: translateZ(0); filter: drop-shadow(0 5px 10px rgba(0,0,0,0.2)); }
         .balloon-body { position: relative; border-radius: 50%; width: 100%; height: 100%; background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.8), var(--color) 70%); }
-        .balloon-highlight { position: absolute; top: 20%; left: 20%; width: 15%; height: 15%; background: rgba(255,255,255,0.6); border-radius: 50%; }
-        .balloon-string { position: absolute; bottom: -30px; left: 50%; transform: translateX(-50%); height: 30px; width: 2px; background: rgba(255,255,255,0.8); }
-        .balloon-knot { position: absolute; bottom: -30px; left: 50%; transform: translateX(-50%); width: 8px; height: 8px; background: rgba(255,255,255,0.8); border-radius: 50%; }
         @keyframes floatBalloon { 0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0.8; } 100% { transform: translateY(-130vh) translateX(var(--x-drift, -3vw)) rotate(var(--rotation, -3deg)); opacity: 0; } }
         
-        .confetti { position: absolute; width: 10px; height: 10px; background: var(--color); border-radius: 50%; animation: fall linear forwards; z-index: 0; }
-        @keyframes fall { to { transform: translateY(100vh) rotate(360deg); opacity: 0; } }
-
-        /* MODAL STYLES (Unified) */
+        /* MODAL STYLES (Styled but using original HTML structure) */
         .feedback-modal, .gift-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); z-index: 3000; justify-content: center; align-items: center; padding: 15px; }
-        .feedback-content { background: rgba(30, 40, 60, 0.95); border-radius: 20px; padding: 40px; text-align: center; width: 90%; max-width: 400px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5); border-top: 4px solid var(--primary); }
+        .feedback-content {
+            background: rgba(30, 40, 60, 0.95); border-radius: 20px; padding: 40px; text-align: center;
+            width: 90%; max-width: 400px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            display: flex; flex-direction: column; align-items: center;
+        }
+        #successModal .feedback-content { border-top: 4px solid var(--success); }
+        #failureModal .feedback-content { border-top: 4px solid var(--error); }
+        
         .feedback-content .icon-container { height: 80px; margin-bottom: 20px; display: flex; justify-content: center; align-items: center; }
         .feedback-content .icon { font-size: 60px; }
         .feedback-content .icon.success { color: var(--success); }
@@ -238,7 +238,7 @@
             </div>
         </div>
     </div>
-
+    
     <div class="gift-modal" id="giftModal">
         <div class="gift-box" onclick="openCard()">
             <img src="IMG_1316.png" alt="Gift Box" style="width: 100%; height: 100%; object-fit: contain;">
@@ -250,16 +250,25 @@
             <p>"mungkin hadiahku ga seberapa semoga bermanfaat, dan selamat bertambah usia, dilancarkan disemua hal, dan menjadi pribadi yang lebih baik dari sebelum nya ✨"</p>
         </div>
     </div>
-
-    <div class="feedback-modal" id="feedbackModal">
+    
+    <div class="feedback-modal" id="successModal">
         <div class="feedback-content">
             <div class="icon-container">
-                <div class="loader" id="feedbackLoader"></div>
-                <i class="fas fa-check-circle icon success hidden" id="successIcon"></i>
-                <i class="fas fa-times-circle icon failure hidden" id="failureIcon"></i>
+                <div class="loader"></div>
+                <i class="fas fa-check-circle icon success hidden"></i>
             </div>
-            <h2 id="feedbackTitle"></h2>
-            <p id="feedbackMessage"></p>
+            <h2>Login Berhasil!</h2>
+            <p>Memuat Laman...</p>
+        </div>
+    </div>
+    <div class="feedback-modal" id="failureModal">
+        <div class="feedback-content">
+            <div class="icon-container">
+                <div class="loader"></div>
+                <i class="fas fa-times-circle icon failure hidden"></i>
+            </div>
+            <h2 id="failure-title">Login Gagal!</h2>
+            <p id="failure-message">Coba cek lagi...</p>
         </div>
     </div>
     
@@ -274,25 +283,18 @@
             messagingSenderId: "523290705179",
             appId: "1:523290705179:web:b06ae4d8e6b08cf07b27be"
         };
+
+        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        // Global variables
-        let GUEST_USER = "user", GUEST_PASS = "user", BIRTHDAY_NAME = "Mayfa",
-            BIRTH_DATE = "2005-09-28", QR_IMAGE_URL = "";
+        // --- ORIGINAL JAVASCRIPT LOGIC (RESTORED) ---
+        let GUEST_USER = "user";
+        let GUEST_PASS = "user";
+        let BIRTHDAY_NAME = "Mayfa";
+        let BIRTH_DATE = "2005-09-28";
+        let QR_IMAGE_URL = "";
 
-        // UI Elements
-        const loginContainer = document.getElementById("loginContainer"), loginBox = document.getElementById("loginBox"),
-              birthdayPage = document.getElementById("birthdayPage"), giftModal = document.getElementById("giftModal"),
-              giftBox = document.querySelector(".gift-box"), giftCard = document.getElementById("giftCard"),
-              backgroundMusic = document.getElementById("background-music"), togglePassword = document.getElementById("togglePassword"),
-              passwordInput = document.getElementById("password"),
-              // Unified Feedback Modal Elements
-              feedbackModal = document.getElementById('feedbackModal'), feedbackTitle = document.getElementById('feedbackTitle'),
-              feedbackMessage = document.getElementById('feedbackMessage'), feedbackLoader = document.getElementById('feedbackLoader'),
-              successIcon = document.getElementById('successIcon'), failureIcon = document.getElementById('failureIcon');
-
-        // Load settings from Firebase
         database.ref('settings').on('value', (snapshot) => {
             const settings = snapshot.val();
             if (settings) {
@@ -308,84 +310,99 @@
                 }
             }
         });
+
+        const loginContainer = document.getElementById("loginContainer");
+        const loginBox = document.getElementById("loginBox");
+        const birthdayPage = document.getElementById("birthdayPage");
+        const giftModal = document.getElementById("giftModal");
+        const giftBox = document.querySelector(".gift-box");
+        const giftCard = document.getElementById("giftCard");
+        const backgroundMusic = document.getElementById("background-music");
+        const togglePassword = document.getElementById("togglePassword");
+        const passwordInput = document.getElementById("password");
+        const successModal = document.getElementById("successModal");
+        const successLoader = successModal.querySelector(".loader");
+        const successIcon = successModal.querySelector(".icon.success");
+        const failureModal = document.getElementById("failureModal");
+        const failureLoader = failureModal.querySelector(".loader");
+        const failureIcon = failureModal.querySelector(".icon.failure");
+        const failureTitle = failureModal.querySelector("#failure-title");
+        const failureMessage = failureModal.querySelector("#failure-message");
         
-        // --- Unified Feedback Modal Logic ---
-        function showFeedback(state, title, message = '') {
-            feedbackLoader.classList.add('hidden');
-            successIcon.classList.add('hidden');
-            failureIcon.classList.add('hidden');
-            const feedbackContent = feedbackModal.querySelector('.feedback-content');
-            
-            feedbackModal.style.display = 'flex';
-            feedbackTitle.textContent = title;
-            feedbackMessage.textContent = message;
-            
-            if (state === 'loading') {
-                feedbackLoader.classList.remove('hidden');
-                feedbackContent.style.borderColor = 'var(--primary)';
-            } else if (state === 'success') {
-                successIcon.classList.remove('hidden');
-                feedbackContent.style.borderColor = 'var(--success)';
-            } else if (state === 'failure') {
-                failureIcon.classList.remove('hidden');
-                feedbackContent.style.borderColor = 'var(--error)';
-            }
-        }
-        function hideFeedback() {
-            feedbackModal.style.display = 'none';
-        }
-        
-        // Main Logic
+        // This is the original, working login function
         function login() {
             const username = document.getElementById("username").value;
             const password = document.getElementById("password").value;
             
             if (username === GUEST_USER && password === GUEST_PASS) {
-                showFeedback('loading', 'Login Berhasil!', 'Mempersiapkan keajaiban...');
                 loginBox.style.transform = 'translateY(-20px) rotateY(20deg)';
                 loginBox.style.boxShadow = '0 25px 50px rgba(0, 0, 0, 0.3)';
-
+                
+                successLoader.classList.remove("hidden");
+                successIcon.classList.add("hidden");
+                successModal.style.display = "flex";
+                
                 setTimeout(() => {
-                    showFeedback('success', 'Selamat Datang!', 'Membuka halaman untukmu...');
                     loginBox.style.transform = 'translateY(40px) rotateY(-90deg) scale(0.8)';
                     loginBox.style.opacity = '0';
-
+                    
                     setTimeout(() => {
-                        hideFeedback();
-                        loginBox.classList.add("hidden");
-                        loginContainer.style.display = "none";
-                        birthdayPage.style.display = "flex";
-                        document.body.classList.remove("no-scroll");
+                        successLoader.classList.add("hidden");
+                        successIcon.classList.remove("hidden");
                         
-                        try {
-                            backgroundMusic.play().catch(e => console.log("Autoplay gagal: ", e));
-                        } catch (e) { console.log("Autoplay error: ", e); }
-                        
-                        document.getElementById("birthdayName").textContent = BIRTHDAY_NAME;
-                        calculateAndDisplayAge(BIRTH_DATE);
-                        createBalloons(15);
+                        setTimeout(() => {
+                            successModal.style.display = "none";
+                            loginBox.classList.add("hidden");
+                            
+                            setTimeout(() => {
+                                loginContainer.style.display = "none";
+                                birthdayPage.style.display = "flex";
+                                document.body.classList.remove("no-scroll");
+                                
+                                try {
+                                    backgroundMusic.play().catch(e => console.log("Autoplay gagal: ", e));
+                                } catch (e) {
+                                    console.log("Autoplay error: ", e);
+                                }
+                                
+                                document.getElementById("birthdayName").textContent = BIRTHDAY_NAME;
+                                calculateAndDisplayAge(BIRTH_DATE);
+                                createBalloons(15);
+                            }, 500);
+                        }, 1000);
+                    }, 1500);
+                }, 300);
+            } else {
+                loginBox.animate([
+                    { transform: 'translateX(0px)', easing: 'ease-in' },
+                    { transform: 'translateX(-15px)', easing: 'ease-out' },
+                    { transform: 'translateX(15px)', easing: 'ease-in' },
+                    { transform: 'translateX(0px)', easing: 'ease-out' }
+                ], {
+                    duration: 600,
+                    iterations: 1
+                });
+                
+                failureLoader.classList.remove("hidden");
+                failureIcon.classList.add("hidden");
+                failureTitle.textContent = "Mengecek...";
+                failureMessage.textContent = "Memverifikasi username & password.";
+                failureModal.style.display = "flex";
+                
+                setTimeout(() => {
+                    failureLoader.classList.add("hidden");
+                    failureIcon.classList.remove("hidden");
+                    failureTitle.textContent = "Login Gagal!";
+                    failureMessage.textContent = "Silakan coba lagi.";
+                    
+                    setTimeout(() => {
+                        failureModal.style.display = "none";
                     }, 1500);
                 }, 1500);
-
-            } else {
-                loginBox.animate([{ transform: 'translateX(0px)' },{ transform: 'translateX(-15px)' },{ transform: 'translateX(15px)' },{ transform: 'translateX(0px)' }], { duration: 500, iterations: 1 });
-                showFeedback('failure', 'Login Gagal!', 'Username atau password salah. Coba lagi ya.');
-                setTimeout(hideFeedback, 2500);
             }
         }
-
-        function calculateAndDisplayAge(birthDate) {
-            const birthDateObj = new Date(birthDate);
-            const today = new Date();
-            let age = today.getFullYear() - birthDateObj.getFullYear();
-            const monthDiff = today.getMonth() - birthDateObj.getMonth();
-            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDateObj.getDate())) {
-                age--;
-            }
-            document.getElementById("ageDisplay").innerText = `Hari ini usiamu genap ${age} tahun. Selamat!`;
-        }
-
-        // --- Event Listeners and Initializers ---
+        
+        // --- ALL OTHER ORIGINAL FUNCTIONS (UNCHANGED) ---
         document.addEventListener('DOMContentLoaded', () => {
             document.body.classList.add("no-scroll");
             birthdayPage.style.display = "none";
@@ -414,7 +431,7 @@
                 observer.observe(card);
             });
         });
-
+        
         togglePassword.addEventListener("click", function() {
             this.classList.add("icon-toggle-animation");
             const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
@@ -424,7 +441,17 @@
             this.addEventListener("animationend", () => { this.classList.remove("icon-toggle-animation"); }, { once: true });
         });
         
-        // --- Animations and Effects ---
+        function calculateAndDisplayAge(birthDate) {
+            const birthDateObj = new Date(birthDate);
+            const today = new Date();
+            let age = today.getFullYear() - birthDateObj.getFullYear();
+            const monthDiff = today.getMonth() - birthDateObj.getMonth();
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDateObj.getDate())) {
+                age--;
+            }
+            document.getElementById("ageDisplay").innerText = `Hari ini usiamu genap ${age} tahun. Selamat!`;
+        }
+
         function createBalloons(count) {
             const colors = ['#FF6B6B', '#FF8E53', '#4ECDC4', '#6A11CB', '#2575FC', '#FFD166', '#EF476F', '#118AB2'];
             for (let i = 0; i < count; i++) {
@@ -440,8 +467,7 @@
                 balloon.style.animationDelay = `${Math.random() * 2}s`;
                 balloon.style.setProperty('--x-drift', `${(Math.random() - 0.5) * 15}vw`);
                 balloon.style.setProperty('--rotation', `${(Math.random() - 0.5) * 10}deg`);
-
-                balloon.innerHTML = `<div class="balloon-body"><div class="balloon-highlight"></div></div><div class="balloon-string"></div><div class="balloon-knot"></div>`;
+                balloon.innerHTML = `<div class="balloon-body"></div>`;
                 document.body.appendChild(balloon);
                 setTimeout(() => { balloon.remove(); }, duration * 1000);
             }
@@ -453,20 +479,20 @@
             document.body.appendChild(particle);
             const size = Math.random() * 5 + 3;
             particle.style.width = `${size}px`; particle.style.height = `${size}px`;
-            particle.style.background = [var(--primary), var(--secondary), var(--accent1), '#ffffff'][Math.floor(Math.random() * 4)];
+            particle.style.background = ['#ff6b6b', '#ffd166', '#4ecdc4', '#ffffff'][Math.floor(Math.random() * 4)];
             particle.style.left = Math.random() * 100 + "vw";
             const duration = Math.random() * 5000 + 5000;
             const xOffset = 200 * (Math.random() - 0.5);
             particle.animate([{ transform: "translate(0, 0)", opacity: 1 }, { transform: `translate(${xOffset}px, 105vh)`, opacity: 0 }], { duration: duration, easing: "linear" }).onfinish = () => particle.remove();
         }
-
+        
         let fireworksInterval;
         function createParticle(x, y) {
             const p = document.createElement("div");
-            p.className = "drifting-particle"; // Re-use for style
+            p.className = "drifting-particle";
             document.body.appendChild(p);
             p.style.width = `${Math.random()*5+3}px`; p.style.height = p.style.width;
-            p.style.background = [var(--primary), var(--secondary), var(--accent1), '#ffffff'][Math.floor(Math.random()*4)];
+            p.style.background = ['#ff6b6b', '#ff8e53', '#6a11cb', '#2575fc', '#4ecdc4', '#ffd166', '#fff'][Math.floor(Math.random()*7)];
             const xOff = (Math.random()-0.5)*300, yOff = (Math.random()-0.5)*300, dur = Math.random()*800+500;
             p.style.left = `${x}px`; p.style.top = `${y}px`;
             p.animate([{transform:"translate(0,0)",opacity:1},{transform:`translate(${xOff}px,${yOff}px)`,opacity:0}],{duration:dur,easing:"ease-out"}).onfinish=()=>p.remove();
@@ -474,7 +500,6 @@
         function startFireworks(){ if(fireworksInterval)clearInterval(fireworksInterval); fireworksInterval=setInterval(()=> {const x=window.innerWidth*Math.random(), y=window.innerHeight*Math.random()*0.5; for(let i=0;i<20;i++)createParticle(x,y);}, 500);}
         function stopFireworks() { clearInterval(fireworksInterval); }
         
-        // Gift Modal Logic
         function openGift() { giftModal.style.display = "flex"; }
         function openCard() {
             giftBox.style.display = "none";
